@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
     <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
     <script>
         async function handleLogout(event) {
             event.preventDefault();
@@ -36,7 +37,148 @@
     </script>
 </head>
 <body>
-<p><a href="/logout">Logout</a></p>
-<p><a href="/admin/test.html">Test</a></p>
+<!-- for header part -->
+<header>
+
+    <div class="logosec">
+        <img src=
+                     "https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn"
+             id="menuicn"
+             alt="menu-icon">
+        <div class="logo">Book Hub</div>
+    </div>
+
+    <div class="message">
+        <div class="dp">
+            <img src=
+                         "https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn"
+                 alt="dp">
+        </div>
+    </div>
+
+</header>
+
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option1">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
+                         class="nav-img"
+                         alt="dashboard">
+                    <a href="" style="color: white"><h3>Dashboard</h3></a>
+                </div>
+
+                <div class="option2 nav-option">
+                    <img src=
+                                 "/images/user.png"
+                         class="nav-img"
+                         alt="users">
+                    <a href="" style="color: #4b49ac"><h3>Users</h3></a>
+                </div>
+
+                <div class="nav-option option3">
+                    <img src=
+                                 "/images/w1.png"
+                         class="nav-img"
+                         alt="books">
+                    <a href="" style="color: #4b49ac"><h3>Books</h3></a>
+                </div>
+
+                <div class="nav-option option4">
+                    <img src=
+                                 "/images/comment.png"
+                         class="nav-img"
+                         alt="comments">
+                    <a href="" style="color: #4b49ac"><h3>Comments</h3></a>
+                </div>
+
+                <div class="nav-option option5">
+                    <img src=
+                                 "/images/user-profile.png"
+                         class="nav-img"
+                         alt="user-profile">
+                    <a href="" style="color: #4b49ac"><h3>User Profile</h3></a>
+                </div>
+
+                <div class="nav-option logout">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
+                         class="nav-img"
+                         alt="logout">
+                    <a href="/logout" style="color: #4b49ac"><h3>Logout</h3></a>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+    <div class="main">
+
+        <div class="searchbar2">
+            <label for=""></label><input type="text"
+                                         name=""
+                                         id=""
+                                         placeholder="Search">
+            <div class="searchbtn">
+                <img src=
+                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                     class="icn srchicn"
+                     alt="search-button">
+            </div>
+        </div>
+
+        <div class="box-container">
+
+            <div class="box box1">
+                <div class="text">
+                    <h2 class="topic-heading">60.5k</h2>
+                    <h2 class="topic">Visitors</h2>
+                </div>
+
+                <img src=
+                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
+                     alt="Views">
+            </div>
+
+            <div class="box box2">
+                <div class="text">
+                    <h2 class="topic-heading">150</h2>
+                    <h2 class="topic">Users</h2>
+                </div>
+
+                <img src=
+                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png"
+                     alt="likes">
+            </div>
+        </div>
+        <div class="box-container">
+            <div class="box box3">
+                <div class="text">
+                    <h2 class="topic-heading">320</h2>
+                    <h2 class="topic">Comments</h2>
+                </div>
+
+                <img src=
+                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
+                     alt="comments">
+            </div>
+
+            <div class="box box4">
+                <div class="text">
+                    <h2 class="topic-heading">70</h2>
+                    <h2 class="topic">Published</h2>
+                </div>
+
+                <img src=
+                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/dashboard.js"></script>
 </body>
 </html>

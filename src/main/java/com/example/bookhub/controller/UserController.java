@@ -100,7 +100,7 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserRequest userRequest, HttpSession session) {
         User user = userRepository.findByEmail(userRequest.getEmail());
-        if (user != null && passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
+        if (user != null && passwordEncoder.matches(userRequest.getPassword(), user.getPassword()) && userRequest.getName().matches(user.getName())) {
             session.setAttribute("user", user); // Set user attribute in session
             User sessionUser = (User) session.getAttribute("user");
 

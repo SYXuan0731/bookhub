@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Register Page</title>
-    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="icon" href="/images/logo.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="css/register.css" />
     <script>
         async function handleRegister(event) {
             event.preventDefault();
@@ -43,19 +44,36 @@
     </script>
 </head>
 <body>
-<form action="/register" method="POST" id="registerForm">
-    <div>
-        <label for="nameField">Name</label>
-        <input name="name" id="nameField">
+<section class="container">
+    <div class="register-container">
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+            <h1 class="opacity">REGISTER</h1>
+            <form action="/register" method="POST" id="registerForm">
+                <div>
+                    <label for="nameField">Name</label>
+                    <input name="name" id="nameField" required>
 
-        <label for="emailField">Email</label>
-        <input name="email" id="emailField">
+                    <label for="emailField">Email</label>
+                    <input name="email" id="emailField" required>
 
-        <label for="passwordField">Password</label>
-        <input name="password" id="passwordField">
+                    <label for="passwordField">Password</label>
+                    <input name="password" id="passwordField" type="password" required>
 
-        <button>Submit</button>
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <div class="register-forget opacity">
+                <p>Have an account? <a href="/login.html">Login Here</a></p>
+                <p><a href="/index.html">Back</a></p>
+            </div>
+        </div>
+        <div class="circle circle-two"></div>
     </div>
-</form>
+    <div class="theme-btn-container"></div>
+</section>
+
+<script type="text/javascript" src="js/register.js"></script>
 </body>
 </html>
