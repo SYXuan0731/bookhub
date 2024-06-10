@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <script>
+        async function handleRegister(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: JSON.stringify(Object.fromEntries(formData)),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    window.alert(responseData.message);
+
+                    // Redirect to the specified location
+                    window.location.assign(responseData.redirect);
+                } else {
+                    const errorData = await response.json();
+                    window.alert('Register failed: ' + errorData.message); // Show an alert with the error message
+                }
+            } catch (error) {
+                console.error('Error during register:', error);
+                window.alert('An error occurred. Please try again.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', handleRegister);
+        });
+    </script>
+</head>
+<body>
+<form action="/register" method="POST" id="registerForm">
+    <div>
+        <label for="nameField">Name</label>
+        <input name="name" id="nameField">
+
+        <label for="emailField">Email</label>
+        <input name="email" id="emailField">
+
+        <label for="passwordField">Password</label>
+        <input name="password" id="passwordField">
+
+        <button>Submit</button>
+    </div>
+</form>
+</body>
+</html>
