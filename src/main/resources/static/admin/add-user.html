@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add User Page</title>
+    <script>
+        async function handleAddUser(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch(form.action, {
+                    method: form.method,
+                    body: JSON.stringify(Object.fromEntries(formData)),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    window.alert(responseData.message);
+
+                    // Redirect to the specified location
+                    window.location.assign(responseData.redirect);
+                } else {
+                    const errorData = await response.json();
+                    window.alert('Add New User failed: ' + errorData.message); // Show an alert with the error message
+                }
+            } catch (error) {
+                console.error('Error during register:', error);
+                window.alert('An error occurred. Please try again.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.getElementById('registerForm');
+            registerForm.addEventListener('submit', handleAddUser);
+        });
+    </script>
+</head>
+<body>
+<form action="/user" method="POST" id="registerForm">
+    <div>
+        <label for="nameField">Name</label>
+        <input name="name" id="nameField" required>
+    </div>
+    <div>
+        <label for="emailField">Email</label>
+        <input name="email" id="emailField" type="email" required>
+    </div>
+    <div>
+        <label for="passwordField">Password</label>
+        <input name="password" id="passwordField" type="password" required>
+    </div>
+    <div>
+        <label>Role</label>
+        <input type="radio" id="customerRole" name="role" value="Customer" required checked>
+        <label for="customerRole">Customer</label>
+        <input type="radio" id="adminRole" name="role" value="Admin" required>
+        <label for="adminRole">Admin</label>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+</html>

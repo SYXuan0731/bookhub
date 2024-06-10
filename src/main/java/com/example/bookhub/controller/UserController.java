@@ -26,11 +26,12 @@ public class UserController {
         if (session.getAttribute("user") == null) {
             return ResponseEntity.status(401).body(null);
         }
+        System.out.println(this.userRepository.findAll());
         return ResponseEntity.ok(this.userRepository.findAll());
     }
 
     @PostMapping("/user")
-    public ResponseEntity<User> createUser(@RequestBody UserRequest userRequest, HttpSession session) {
+    public ResponseEntity<Map<String, String>> createUser(@RequestBody UserRequest userRequest, HttpSession session) {
         if (session.getAttribute("user") == null) {
             return ResponseEntity.status(401).body(null);
         }
@@ -41,7 +42,17 @@ public class UserController {
         user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         user.setRole(userRequest.getRole() != null ? userRequest.getRole() : "Customer");
 
-        return ResponseEntity.status(201).body(this.userRepository.save(user));
+        // Save the user to the database
+        User savedUser = this.userRepository.save(user);
+
+        // Create the response message and redirect URL
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Add New User Successfully");
+        response.put("redirect", "/admin/list-user.html");
+
+//        return ResponseEntity.status(201).body(this.userRepository.save(user));
+        return ResponseEntity.ok(response);
+
     }
 
     @GetMapping("/user/{id}")
@@ -88,10 +99,14 @@ public class UserController {
             updatedUser.setId(id);
             updatedUser.setName(userRequest.getName());
             updatedUser.setEmail(userRequest.getEmail());
-            updatedUser.setPassword(passwordEncoder.encode(userRequest.getPassword())); // Ensure password is encoded
             updatedUser.setRole(userRequest.getRole());
+            this.userRepository.save(updatedUser);
 
-            return ResponseEntity.ok(this.userRepository.save(updatedUser));
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User Updated successfully");
+            response.put("redirect", "/admin/list-user.html");
+
+            return ResponseEntity.ok(response);
         } else {
             return ResponseEntity.ok("The user with id: " + id + " was not found.");
         }
@@ -106,7 +121,7 @@ public class UserController {
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Logged in successfully");
-            response.put("redirect", "/" + sessionUser.getRole() + "/dashboard.html");
+            response.put("redirect", "/" + sessionUser.getRole() + "/dashboard.html" + "?userId=" + sessionUser.getId());
 
             return ResponseEntity.ok(response);
         } else {

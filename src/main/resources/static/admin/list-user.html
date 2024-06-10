@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .cell-action {
+            text-align: center;
+        }
+        .cell-action button {
+            margin: 0 5px;
+        }
+
+    </style>
+</head>
+<body>
+<h1>HTML Table Elements</h1>
+<button onclick="redirectToAddUserPage()">Add User</button>
+<table>
+    <caption>List of User Account</caption>
+    <thead>
+    <tr>
+        <th>Index</th>
+        <th>User Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody id="userTableBody">
+    <!-- Rows will be dynamically added here -->
+    </tbody>
+</table>
+</body>
+<script>
+    function redirectToEditPage(userId){
+        window.location.href = `edit-user.html?userId=${encodeURIComponent(userId)}`;
+    }
+
+    function redirectToAddUserPage() {
+        window.location.href = 'add-user.html'; // Replace 'add-user.html' with your target URL
+    }
+    // Function to generate dummy user data
+    async function fetchListUserData(){
+        try{
+            const response = await fetch('/user', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if(response.ok){
+                const responseData = await response.json();
+                populateTableUser(responseData)
+            }else{
+                const errorData = await response.json();
+                window.alert('Fetch Data User failed: ' + errorData.message);
+            }
+        }catch (error) {
+            console.error('Error during login:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+    async function deleteUserData(id){
+        try{
+            const response = await fetch(`/user/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if(response.ok){
+                window.alert("Deleted Successfully");
+                await fetchListUserData();
+            }else{
+                const errorData = await response.json();
+                window.alert('Delete Data User failed: ' + errorData.message);
+            }
+        }catch (error) {
+            console.error('Error deleting user data:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+    function populateTableUser(users) {
+        const roles = ["Admin", "Editor", "Viewer"];
+        const userTableBody = document.getElementById('userTableBody');
+        userTableBody.innerHTML = ''; // Clear any existing rows
+
+        users.forEach((user, index) => {
+            const row = document.createElement('tr');
+
+            const cellIndex = document.createElement('td');
+            cellIndex.textContent = index + 1;
+            row.appendChild(cellIndex);
+
+            const cellName = document.createElement('td');
+            cellName.textContent = user.name; // Assuming 'name' is a property of the User object
+            row.appendChild(cellName);
+
+            const cellEmail = document.createElement('td');
+            cellEmail.textContent = user.email;
+            row.appendChild(cellEmail);
+
+            const cellRole = document.createElement('td');
+            cellRole.textContent = user.role; // Assuming 'role' is a property of the User object
+            row.appendChild(cellRole);
+
+            const cellAction = document.createElement('td');
+            const edtBtn = document.createElement('button');
+            edtBtn.textContent = 'Edit';
+            edtBtn.onclick = () => redirectToEditPage(user.id);
+            const dltBtn = document.createElement('button');
+            dltBtn.textContent = 'Delete';
+            dltBtn.onclick = () => deleteUserData(user.id);
+            cellAction.appendChild(edtBtn);
+            cellAction.appendChild(dltBtn);
+            row.appendChild(cellAction);
+
+            userTableBody.appendChild(row);
+        });
+    }
+
+    // Call the function to populate the table with dummy data
+    fetchListUserData();
+</script>
+</html>

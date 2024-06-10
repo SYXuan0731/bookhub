@@ -32,10 +32,19 @@
             const logoutLink = document.querySelector('a[href="/logout"]');
             logoutLink.addEventListener('click', handleLogout);
         });
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('userId'); // Replace with your actual userId variable
+            const profileLink = document.getElementById('profileLink');
+            profileLink.href = `profile.html?userId=${encodeURIComponent(userId)}`;
+        });
     </script>
 </head>
 <body>
 <p><a href="/logout">Logout</a></p>
+<p><a href="/admin/list-user.html">User ListPage</a></p>
+<p><a id="profileLink">Profile Page</a></p>
 <p><a href="/admin/test.html">Test</a></p>
 </body>
 </html>
