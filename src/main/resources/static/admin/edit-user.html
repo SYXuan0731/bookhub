@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit User Page</title>
+    <link rel="icon" href="/images/logo.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="../css/register.css" />
     <script>
         async function handleEditUser(event) {
             event.preventDefault();
@@ -91,27 +93,76 @@
     </script>
 </head>
 <body>
-<form action="" method="POST" id="registerForm">
-    <div>
-        <label for="nameField">Name</label>
-        <input name="name" id="nameField" required>
-    </div>
-    <div>
-        <label for="emailField">Email</label>
-        <input name="email" id="emailField" type="email" required>
-        <input name="password" id="passwordField" type="hidden">
-    </div>
 
-    <div>
-        <label>Role</label>
-        <input type="radio" id="customerRole" name="role" value="Customer" required checked>
-        <label for="customerRole">Customer</label>
-        <input type="radio" id="adminRole" name="role" value="Admin" required>
-        <label for="adminRole">Admin</label>
+<section class="container">
+    <div class="register-container">
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <img style="z-index: -10;" src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+            <h1 class="opacity">EDIT NEW USER</h1>
+            <form action="" method="POST" id="registerForm">
+                <div>
+                    <label for="nameField">Name</label>
+                    <input name="name" id="nameField" required>
+
+                    <label for="emailField">Email</label>
+                    <input name="email" id="emailField" required>
+
+<!--                    <label for="passwordField">Password</label>-->
+<!--                    <input name="password" id="passwordField" type="password" required>-->
+                    <input name="password" id="passwordField" type="hidden">
+
+
+                    <label>Role</label>
+                    <div style="display: flex; justify-content: center; gap: 10px">
+                        <div style = 'width: 150px; display: flex; align-items: center'>
+                            <label for="customerRole">Customer</label>
+                            <input type="radio" id="customerRole" name="role" value="Customer" required checked>
+                        </div>
+                        <div style = 'width: 150px; display: flex; align-items: center'>
+                            <label for="adminRole">Admin</label>
+                            <input type="radio" id="adminRole" name="role" value="Admin" required>
+                        </div>
+
+                    </div>
+
+
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+            <div class="register-forget opacity">
+                <p><a href="/admin/list-user.html">Back</a></p>
+            </div>
+        </div>
+        <div class="circle circle-two"></div>
     </div>
-    <div>
-        <button type="submit">Submit</button>
-    </div>
-</form>
+    <div class="theme-btn-container"></div>
+</section>
+
+
+<!--<form action="" method="POST" id="registerForm">-->
+<!--    <div>-->
+<!--        <label for="nameField">Name</label>-->
+<!--        <input name="name" id="nameField" required>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <label for="emailField">Email</label>-->
+<!--        <input name="email" id="emailField" type="email" required>-->
+<!--        <input name="password" id="passwordField" type="hidden">-->
+<!--    </div>-->
+
+<!--    <div>-->
+<!--        <label>Role</label>-->
+<!--        <input type="radio" id="customerRole" name="role" value="Customer" required checked>-->
+<!--        <label for="customerRole">Customer</label>-->
+<!--        <input type="radio" id="adminRole" name="role" value="Admin" required>-->
+<!--        <label for="adminRole">Admin</label>-->
+<!--    </div>-->
+<!--    <div>-->
+<!--        <button type="submit">Submit</button>-->
+<!--    </div>-->
+<!--</form>-->
+<script type="text/javascript" src="../js/register.js"></script>
+
 </body>
 </html>

@@ -3,6 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="../css/table-main.css" />
+
+
+<!--    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">-->
+
+<!--    <link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">-->
+
+    <link rel="stylesheet" type="text/css" href="../css/table-util.css">
+    <link rel="stylesheet" type="text/css" href="../css/table-main.css">
     <style>
         table {
             width: 100%;
@@ -29,23 +46,149 @@
     </style>
 </head>
 <body>
-<h1>HTML Table Elements</h1>
-<button onclick="redirectToAddUserPage()">Add User</button>
-<table>
-    <caption>List of User Account</caption>
-    <thead>
-    <tr>
-        <th>Index</th>
-        <th>User Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Action</th>
-    </tr>
-    </thead>
-    <tbody id="userTableBody">
-    <!-- Rows will be dynamically added here -->
-    </tbody>
-</table>
+<header>
+
+    <div class="logosec">
+        <img src=
+                     "https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn"
+             id="menuicn"
+             alt="menu-icon">
+        <div class="logo">Book Hub</div>
+    </div>
+
+    <div class="message">
+        <div class="dp">
+            <img src=
+                         "https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn"
+                 alt="dp">
+        </div>
+    </div>
+
+</header>
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+                <div class="nav-option option2">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
+                         class="nav-img"
+                         alt="dashboard">
+                    <a href="" style="color: #4b49ac"><h3>Dashboard</h3></a>
+                </div>
+
+                <div class="option1 nav-option">
+                    <img src=
+                                 "/images/user.png"
+                         class="nav-img"
+                         alt="users">
+                    <a href="/admin/list-user.html" style="color: white"><h3>Users</h3></a>
+                </div>
+
+                <div class="nav-option option3">
+                    <img src=
+                                 "/images/w1.png"
+                         class="nav-img"
+                         alt="books">
+                    <a href="" style="color: #4b49ac"><h3>Books</h3></a>
+                </div>
+
+                <div class="nav-option option4">
+                    <img src=
+                                 "/images/comment.png"
+                         class="nav-img"
+                         alt="comments">
+                    <a href="" style="color: #4b49ac"><h3>Comments</h3></a>
+                </div>
+
+                <div class="nav-option option5">
+                    <img src=
+                                 "/images/user-profile.png"
+                         class="nav-img"
+                         alt="user-profile">
+                    <a href="profile.html" style="color: #4b49ac"><h3>User Profile</h3></a>
+                </div>
+
+                <div class="nav-option logout">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
+                         class="nav-img"
+                         alt="logout">
+                    <a href="/logout" style="color: #4b49ac"><h3>Logout</h3></a>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+    <div class="main">
+<!--        <h1>HTML Table Elements</h1>-->
+<!--        <button onclick="redirectToAddUserPage()">Add User</button>-->
+<!--        <table>-->
+<!--            <caption>List of User Account</caption>-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>Index</th>-->
+<!--                <th>User Name</th>-->
+<!--                <th>Email</th>-->
+<!--                <th>Role</th>-->
+<!--                <th>Action</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody id="userTableBody">-->
+<!--            &lt;!&ndash; Rows will be dynamically added here &ndash;&gt;-->
+<!--            </tbody>-->
+<!--        </table>-->
+
+        <div class="limiter">
+
+            <div class="container-table100">
+                <div class="wrap-table100">
+                    <button style="border-radius: 10px; padding: 10px 20px; background: white; margin-bottom: 10px" onclick="redirectToAddUserPage()">Add User</button>
+
+                    <div class="table" id="userTableBody">
+<!--                        <div class="row header">-->
+
+<!--                            <div class="cell">-->
+<!--                                User Name-->
+<!--                            </div>-->
+<!--                            <div class="cell">-->
+<!--                                Email-->
+<!--                            </div>-->
+<!--                            <div class="cell">-->
+<!--                                Role-->
+<!--                            </div>-->
+<!--                            <div class="cell">-->
+<!--                                Action-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row">-->
+<!--                            <div class="cell" data-title="Name">-->
+<!--                                Vincent Williamson-->
+<!--                            </div>-->
+<!--                            <div class="cell" data-title="Email">-->
+<!--                                31-->
+<!--                            </div>-->
+<!--                            <div class="cell" data-title="Role">-->
+<!--                                iOS Developer-->
+<!--                            </div>-->
+<!--                            <div class="cell" data-title="Action">-->
+<!--                                Washington-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="row" id="userTableBody">-->
+<!--                            &lt;!&ndash; Rows will be dynamically added here &ndash;&gt;-->
+<!--                        </div>-->
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
 </body>
 <script>
     function redirectToEditPage(userId){
@@ -101,43 +244,78 @@
     }
 
     function populateTableUser(users) {
-        const roles = ["Admin", "Editor", "Viewer"];
         const userTableBody = document.getElementById('userTableBody');
         userTableBody.innerHTML = ''; // Clear any existing rows
 
+        const rowHeader = document.createElement('div');
+        rowHeader.classList.add('row', 'header');
+        const headerName = document.createElement('div');
+        headerName.classList.add('cell');
+        headerName.textContent = "User Name";
+        rowHeader.appendChild(headerName);
+        const headerEmail = document.createElement('div');
+        headerEmail.classList.add('cell');
+        headerEmail.textContent = "Email";
+        rowHeader.appendChild(headerEmail);
+        const headerRole = document.createElement('div');
+        headerRole.classList.add('cell');
+        headerRole.textContent = "Role";
+        rowHeader.appendChild(headerRole);
+        const headerAction = document.createElement('div');
+        headerAction.classList.add('cell', 'cell-action');
+        headerAction.textContent = "Action";
+        rowHeader.appendChild(headerAction);
+
+        userTableBody.appendChild(rowHeader);
+
         users.forEach((user, index) => {
-            const row = document.createElement('tr');
+            const row = document.createElement('div');
+            row.classList.add('row');
 
-            const cellIndex = document.createElement('td');
-            cellIndex.textContent = index + 1;
-            row.appendChild(cellIndex);
+            // const cellIndex = document.createElement('div');
+            // cellIndex.classList.add('cell');
+            // cellIndex.setAttribute('data-title', 'Full Name');
+            // cellIndex.textContent = index + 1;
+            // row.appendChild(cellIndex);
 
-            const cellName = document.createElement('td');
+            const cellName = document.createElement('div');
+            cellName.classList.add('cell');
+            cellName.setAttribute('data-title', 'Name');
             cellName.textContent = user.name; // Assuming 'name' is a property of the User object
             row.appendChild(cellName);
 
-            const cellEmail = document.createElement('td');
+            const cellEmail = document.createElement('div');
+            cellEmail.classList.add('cell');
+            cellEmail.setAttribute('data-title', 'Email');
             cellEmail.textContent = user.email;
             row.appendChild(cellEmail);
 
-            const cellRole = document.createElement('td');
+            const cellRole = document.createElement('div');
+            cellRole.classList.add('cell');
+            cellRole.setAttribute('data-title', 'Role');
             cellRole.textContent = user.role; // Assuming 'role' is a property of the User object
             row.appendChild(cellRole);
 
-            const cellAction = document.createElement('td');
+            const cellAction = document.createElement('div');
+            cellAction.classList.add('cell', 'cell-action');
+            cellAction.setAttribute('data-title', 'Action');
+
             const edtBtn = document.createElement('button');
             edtBtn.textContent = 'Edit';
             edtBtn.onclick = () => redirectToEditPage(user.id);
+            cellAction.appendChild(edtBtn);
+
             const dltBtn = document.createElement('button');
             dltBtn.textContent = 'Delete';
             dltBtn.onclick = () => deleteUserData(user.id);
-            cellAction.appendChild(edtBtn);
             cellAction.appendChild(dltBtn);
+
             row.appendChild(cellAction);
 
             userTableBody.appendChild(row);
         });
     }
+
 
     // Call the function to populate the table with dummy data
     fetchListUserData();

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Customer Dashboard</title>
     <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
     <script>
         async function handleLogout(event) {
             event.preventDefault();
@@ -32,16 +33,84 @@
         document.addEventListener('DOMContentLoaded', function() {
             const logoutLink = document.querySelector('a[href="/logout"]');
             logoutLink.addEventListener('click', handleLogout);
+        })
 
-            const params = new URLSearchParams(window.location.search);
-            const userId = params.get('userId'); // Replace with your actual userId variable
-            const profileLink = document.getElementById('profileLink');
-            profileLink.href = `profile.html?userId=${encodeURIComponent(userId)}`;
-        });
+        // document.addEventListener('DOMContentLoaded', (event) => {
+        //     const params = new URLSearchParams(window.location.search);
+        //     const userId = params.get('userId'); // Replace with your actual userId variable
+        //     const profileLink = document.getElementById('profileLink');
+        //     profileLink.href = `profile.html?userId=${encodeURIComponent(userId)}`;
+        // });
     </script>
 </head>
 <body>
-<p><a id="profileLink">Profile Page</a></p>
-<p><a href="/logout">Logout</a></p>
+<header>
+
+    <div class="logosec">
+        <img src=
+                     "https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+             class="icn menuicn"
+             id="menuicn"
+             alt="menu-icon">
+        <div class="logo">Book Hub</div>
+    </div>
+
+    <div class="message">
+        <div class="dp">
+            <img src=
+                         "https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+                 class="dpicn"
+                 alt="dp">
+        </div>
+    </div>
+
+</header>
+
+<div class="main-container">
+    <div class="navcontainer">
+        <nav class="nav">
+            <div class="nav-upper-options">
+
+                <div class="nav-option option3">
+                    <img src=
+                                 "/images/w1.png"
+                         class="nav-img"
+                         alt="books">
+                    <a href="" style="color: #4b49ac"><h3>Books</h3></a>
+                </div>
+
+                <div class="nav-option option4">
+                    <img src=
+                                 "/images/comment.png"
+                         class="nav-img"
+                         alt="comments">
+                    <a href="" style="color: #4b49ac"><h3>Comments</h3></a>
+                </div>
+
+                <div class="nav-option option5">
+                    <img src=
+                                 "/images/user-profile.png"
+                         class="nav-img"
+                         alt="user-profile">
+                    <a href="profile.html" style="color: #4b49ac"><h3>User Profile</h3></a>
+                </div>
+
+                <div class="nav-option logout">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
+                         class="nav-img"
+                         alt="logout">
+                    <a href="/logout" style="color: #4b49ac"><h3>Logout</h3></a>
+                </div>
+
+            </div>
+        </nav>
+    </div>
+</div>
+
+<!--<p><a id="profileLink">Profile Page</a></p>-->
+<!--<p><a href="/logout">Logout</a></p>-->
+<script src="../js/dashboard.js"></script>
+
 </body>
 </html>

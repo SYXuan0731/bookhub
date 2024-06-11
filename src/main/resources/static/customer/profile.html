@@ -3,69 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <title>Profile Page</title>
+    <link rel="icon" href="/images/logo.png" type="image/png" />
+    <link rel="stylesheet" type="text/css" href="../css/register.css" />
 </head>
 <body>
-    <div class="profile-container">
-        <h2>Profile Page</h2>
-        <div class="profile-field">
-            <label for="name">Name:</label>
-            <span id="name"></span>
+
+
+<section class="container">
+    <div class="register-container">
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <img style="z-index: -10;" src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+            <h1 class="opacity">PROFILE PAGE</h1>
+            <form action="/user-profile" method="POST" id="updateForm">
+                <div>
+
+                    <label for="nameField">Name</label>
+                    <input name="name" id="nameField" >
+
+                    <label for="emailField">Email</label>
+                    <input name="email" id="emailField" >
+
+                    <label for="roleField">Role</label>
+                    <input name="role" id="roleField" readonly>
+
+                    <button type="submit">Update</button>
+
+                </div>
+            </form>
+            <div class="register-forget opacity">
+                <p><a href="/customer/dashboard.html">Back</a></p>
+            </div>
         </div>
-        <div class="profile-field">
-            <label for="email">Email:</label>
-            <span id="email"></span>
-        </div>
-        <div class="profile-field">
-            <label for="role">Role:</label>
-            <span id="role"></span>
-        </div>
+        <div class="circle circle-two"></div>
     </div>
+    <div class="theme-btn-container"></div>
+</section>
 
-    <button id="editButton">Edit</button>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const userId = params.get('userId');
+<script type="text/javascript" src="../js/register.js"></script>
+<script>
 
-        function redirectToEditPage(userId){
-            window.location.href = `edit-user.html?userId=${encodeURIComponent(userId)}`;
-        }
-
-        async function getUserData(){
-            try {
-                const response = await fetch(`/user/${userId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const responseData = await response.json();
-                    populateProfile(responseData);
-                } else {
-                    const errorData = await response.json();
-                    window.alert('Fetch Data User failed: ' + errorData.message);
+    async function getUserData(){
+        try {
+            const response = await fetch(`/user/profile`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            } catch (error) {
-                console.error('Error during editing:', error);
-                window.alert('An error occurred. Please try again.');
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log(responseData)
+                populateProfile(responseData);
+            } else {
+                const errorData = await response.json();
+                window.alert('Fetch Data User failed: ' + errorData.message);
             }
+        } catch (error) {
+            console.error('Error during editing:', error);
+            window.alert('An error occurred. Please try again.');
         }
+    }
 
-        function populateProfile(data) {
-            document.getElementById('name').textContent = data.name;
-            document.getElementById('email').textContent = data.email;
-            document.getElementById('role').textContent = data.role;
+    function populateProfile(data) {
+        document.getElementById('nameField').value = data.name;
+        document.getElementById('emailField').value = data.email;
+        document.getElementById('roleField').value = data.role;
+    }
 
-            // document.getElementById('passwordField').value = data.password; // Optionally, handle password field
-            const btn = document.getElementById("editButton");
-            btn.onclick = () => redirectToEditPage(userId);
+
+    async function handleUpdate(event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'PATCH',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                window.alert(responseData.message);
+
+                // Redirect to the specified location
+                window.location.assign(responseData.redirect);
+            } else {
+                const errorData = await response.json();
+                window.alert('Login failed: ' + errorData.message); // Show an alert with the error message
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            window.alert('An error occurred. Please try again.');
         }
+    }
 
-        window.onload = getUserData;
+    document.addEventListener('DOMContentLoaded', function() {
+        const updateForm = document.getElementById('updateForm');
+        updateForm.addEventListener('submit', handleUpdate);
+    });
 
-    </script>
+    window.onload = getUserData;
+
+</script>
 
 </body>
 

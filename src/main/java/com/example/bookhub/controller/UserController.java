@@ -52,7 +52,12 @@ public class UserController {
 
 //        return ResponseEntity.status(201).body(this.userRepository.save(user));
         return ResponseEntity.ok(response);
+    }
 
+    @GetMapping("/user/profile")
+    public ResponseEntity<User> getUserProfile(HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/user/{id}")
@@ -86,6 +91,34 @@ public class UserController {
         }
     }
 
+    @PatchMapping("/user-profile")
+    public ResponseEntity updateUserProfile(@RequestBody UserRequest userRequest, HttpSession session) {
+        if (session.getAttribute("user") == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+        User sessionUser = (User) session.getAttribute("user");
+        Optional<User> user = this.userRepository.findById(sessionUser.getId());
+        if (user.isPresent()) {
+            User updatedUser = user.get();
+
+            updatedUser.setId(sessionUser.getId());
+            updatedUser.setName(userRequest.getName());
+            updatedUser.setEmail(userRequest.getEmail());
+            updatedUser.setRole(sessionUser.getRole());
+            this.userRepository.save(updatedUser);
+
+            Map<String, String> response = new HashMap<>();
+            session.removeAttribute("user");
+            session.setAttribute("user", updatedUser);
+            response.put("message", "User Updated successfully");
+            response.put("redirect", "/" + sessionUser.getRole() + "/profile.html");
+
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.ok("The user with id: " + sessionUser.getId() + " was not found.");
+        }
+    }
+
     @PatchMapping("/user/{id}")
     public ResponseEntity updateUserById(@PathVariable String id, @RequestBody UserRequest userRequest, HttpSession session) {
         if (session.getAttribute("user") == null) {
@@ -115,13 +148,13 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserRequest userRequest, HttpSession session) {
         User user = userRepository.findByEmail(userRequest.getEmail());
-        if (user != null && passwordEncoder.matches(userRequest.getPassword(), user.getPassword()) && userRequest.getName().matches(user.getName())) {
+        if (user != null && passwordEncoder.matches(userRequest.getPassword(), user.getPassword())) {
             session.setAttribute("user", user); // Set user attribute in session
             User sessionUser = (User) session.getAttribute("user");
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Logged in successfully");
-            response.put("redirect", "/" + sessionUser.getRole() + "/dashboard.html" + "?userId=" + sessionUser.getId());
+            response.put("redirect", "/" + sessionUser.getRole() + "/dashboard.html");
 
             return ResponseEntity.ok(response);
         } else {

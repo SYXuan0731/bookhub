@@ -12,6 +12,7 @@ html {
     scroll-behavior: smooth;
 }
 
+
 body {
     margin: 0;
     box-sizing: border-box;
@@ -83,6 +84,10 @@ h1 {
     box-shadow: 0 0 16px 1px rgba(0, 0, 0, 0.2);
     animation: wobble 0.3s ease-in;
     -webkit-animation: wobble 0.3s ease-in;
+}
+
+img{
+    z-index: -10;
 }
 
 .register-container form button {
