@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Login Page</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
     <script>
         async function handleLogin(event) {
             event.preventDefault();
@@ -42,16 +44,36 @@
     </script>
 </head>
 <body>
-    <form action="/login" method="POST" id="loginForm">
-        <div>
-            <label for="emailField">Email</label>
-            <input name="email" id="emailField">
+<section class="container">
+    <div class="login-container">
+        <div class="circle circle-one"></div>
+        <div class="form-container">
+            <img src="https://raw.githubusercontent.com/hicodersofficial/glassmorphism-login-form/master/assets/illustration.png" alt="illustration" class="illustration" />
+            <h1 class="opacity">LOGIN</h1>
+            <form action="/login" method="POST" id="loginForm">
+                <div>
+                    <label for="nameField">Name</label>
+                    <input name="name" id="nameField" required>
 
-            <label for="passwordField">Password</label>
-            <input name="password" id="passwordField">
+                    <label for="emailField">Email</label>
+                    <input name="email" id="emailField" required>
 
-            <button>Login</button>
+                    <label for="passwordField">Password</label>
+                    <input name="password" id="passwordField" type="password" required>
+
+                    <button type="submit">Login</button>
+                </div>
+            </form>
+            <div class="login-forget opacity">
+                <p>Don't have an account? <a href="/register.html">Register Now</a></p>
+                <p><a href="/index.html">Back</a></p>
+            </div>
         </div>
-    </form>
+        <div class="circle circle-two"></div>
+    </div>
+    <div class="theme-btn-container"></div>
+</section>
+
+<script type="text/javascript" src="js/login.js"></script>
 </body>
 </html>
