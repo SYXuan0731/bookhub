@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" type="text/css" href="../css/table-main.css"/>
+</head>
+<body>
+<a href="/product/admin-create"> Add Products</a>
+
+<script>
+
+    // fetchProducts();
+
+    async function fetchProducts() {
+        try {
+            const response = await fetch('/products', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log({responseData})
+                // populateTableProduct(responseData)
+            } else {
+                const errorData = await response.json();
+                window.alert('Fetch Product failed: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+</script>
+</body>
+</html>
