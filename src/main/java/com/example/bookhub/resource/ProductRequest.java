@@ -9,15 +9,17 @@ public class ProductRequest {
     private String publishDate;
     private String category;
     private String description;
+    private String image;
 
     public ProductRequest() {}
 
-    public ProductRequest(String title, String author, String publishDate, String category, String description) {
+    public ProductRequest(String title, String author, String publishDate, String category, String description, String image) {
         this.title = title;
         this.author = author;
         this.publishDate = publishDate;
         this.category = category;
         this.description = description;
+        this.image = image;
     }
 
     public String getTitle() {
@@ -60,4 +62,11 @@ public class ProductRequest {
         this.description = description;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }

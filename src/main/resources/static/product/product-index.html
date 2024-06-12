@@ -5,6 +5,13 @@
     <link rel="icon" href="/images/logo.png" type="image/png">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/table-main.css"/>
+    <style>
+        img {
+            object-fit: cover;
+            width: 100px;
+            height: 100px;
+        }
+    </style>
 </head>
 <body>
 <a href="/Product/product-create.html" id="add-products"> Add Products</a>
@@ -36,7 +43,7 @@
 <table id="table"></table>
 <script>
 
-    const headers = ['productId', 'title', 'author', 'publishDate', 'category', 'description'];
+    const headers = ['productId', 'title', 'author', 'publishDate', 'category', 'description', "image"];
     let products, role;
 
     fetchProducts();
@@ -99,7 +106,13 @@
             const tr2 = document.createElement("tr")
             for (let i = 0; i <= headers.length - 1; i++) {
                 const td = document.createElement("td")
-                td.innerHTML = data[j][headers[i]];
+                if (headers[i] === "image") {
+                    const image = document.createElement("img")
+                    image.src = data[j][headers[i]];
+                    td.append(image);
+                } else {
+                    td.innerHTML = data[j][headers[i]];
+                }
                 tr2.append(td);
             }
 

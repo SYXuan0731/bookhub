@@ -11,16 +11,18 @@ public class Product {
     private String publishDate;
     private String category;
     private String description;
+    private String image;
 
     public Product() {}
 
-    public Product(String id, String title, String author, String publishDate, String category, String description) {
+    public Product(String id, String title, String author, String publishDate, String category, String description, String image) {
         this.productId = id;
         this.title = title;
         this.author = author;
         this.publishDate = publishDate;
         this.category = category;
         this.description = description;
+        this.image = image;
     }
 
     public String getProductId() {
@@ -69,6 +71,14 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 }
