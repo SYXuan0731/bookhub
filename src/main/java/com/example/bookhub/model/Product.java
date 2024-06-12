@@ -5,39 +5,62 @@ import org.springframework.data.annotation.Id;
 public class Product {
 
     @Id
-    private String id;
-    private String name;
-    private double price;
+    private String productId;
+    private String title;
+    private String author;
+    private String publishDate;
+    private String category;
     private String description;
 
-    public Product(String name, double price, String description) {
-        this.name = name;
-        this.price = price;
+    public Product() {}
+
+    public Product(String id, String title, String author, String publishDate, String category, String description) {
+        this.productId = id;
+        this.title = title;
+        this.author = author;
+        this.publishDate = publishDate;
+        this.category = category;
         this.description = description;
     }
 
-    public String getId() {
-        return id;
+    public String getProductId() {
+        return productId;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.productId = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public double getPrice() {
-        return price;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getPublishDate() {
+        return publishDate;
+    }
+
+    public void setPublishDate(String publishDate) {
+        this.publishDate = publishDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public String getDescription() {
@@ -47,4 +70,5 @@ public class Product {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

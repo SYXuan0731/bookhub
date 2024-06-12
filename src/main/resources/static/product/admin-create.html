@@ -1,10 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <meta charset="UTF-8">
+    <title>Title</title>
 </head>
 <body>
-$END$
+<form onsubmit="submitForm" method="POST" id="create-form">
+    <div>
+        <label for="titleField">title</label>
+        <input type="text" name="title" id="titleField" required><br><br>
+
+        <label for="authorField">author</label>
+        <input type="text" name="author" id="authorField" required><br><br>
+
+        <label for="publishDateField">publishDate</label>
+        <input type="date" name="publishDate" id="publishDateField" required><br><br>
+
+        <label for="categoryField">category</label>
+        <select name="category" id="categoryField">
+            <option disabled selected>Choose Category</option>
+            <option value="Adventure stories">Adventure stories</option>
+            <option value="Classics">Classics</option>
+            <option value="Crime">Crime</option>
+            <option value="Fairy tales, fables, and folk tales">Fairy tales, fables, and folk tales</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Historical fiction">Historical fiction</option>
+            <option value="Horror">Horror</option>
+            <option value="Humour and satire">Humour and satire</option>
+            <option value="Literary fiction">Literary fiction</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Poetry">Poetry</option>
+            <option value="Plays">Plays</option>
+            <option value="Romance">Romance</option>
+            <option value="Science fiction">Science fiction</option>
+            <option value="Short stories">Short stories</option>
+            <option value="Thrillers">Thrillers</option>
+            <option value="War">War</option>
+            <option value="Women’s fiction">Women’s fiction</option>
+            <option value="Young adult">Young adult</option>
+        </select><br><br>
+
+        <label for="descriptionField">description</label>
+        <input type="text" name="description" id="descriptionField" required><br><br>
+
+        <button type="submit">Submit</button>
+    </div>
+</form>
 </body>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('create-form');
+        form.addEventListener('submit', submitForm);
+    });
+
+    async function submitForm(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        try {
+            const response = await fetch("/product", {
+                method: 'POST',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                window.alert(responseData.message);
+                window.location.assign('/Product/admin-index.html');
+            } else {
+                const errorData = await response.json();
+                window.alert('Create Product failed: ' + errorData.message); // Show an alert with the error message
+            }
+        } catch (error) {
+            console.error('Error during product creation:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+</script>
 </html>

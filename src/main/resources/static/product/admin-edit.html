@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form onsubmit="submitForm" method="POST" id="edit-form">
+    <div>
+        <label for="titleField">title</label>
+        <input type="text" name="title" id="titleField" required><br><br>
+
+        <label for="authorField">author</label>
+        <input type="text" name="author" id="authorField" required><br><br>
+
+        <label for="publishDateField">publishDate</label>
+        <input type="date" name="publishDate" id="publishDateField" required><br><br>
+
+        <label for="categoryField">category</label>
+        <select name="category" id="categoryField">
+            <option disabled selected>Choose Category</option>
+            <option value="Adventure stories">Adventure stories</option>
+            <option value="Classics">Classics</option>
+            <option value="Crime">Crime</option>
+            <option value="Fairy tales, fables, and folk tales">Fairy tales, fables, and folk tales</option>
+            <option value="Fantasy">Fantasy</option>
+            <option value="Historical fiction">Historical fiction</option>
+            <option value="Horror">Horror</option>
+            <option value="Humour and satire">Humour and satire</option>
+            <option value="Literary fiction">Literary fiction</option>
+            <option value="Mystery">Mystery</option>
+            <option value="Poetry">Poetry</option>
+            <option value="Plays">Plays</option>
+            <option value="Romance">Romance</option>
+            <option value="Science fiction">Science fiction</option>
+            <option value="Short stories">Short stories</option>
+            <option value="Thrillers">Thrillers</option>
+            <option value="War">War</option>
+            <option value="Women’s fiction">Women’s fiction</option>
+            <option value="Young adult">Young adult</option>
+        </select><br><br>
+
+        <label for="descriptionField">description</label>
+        <input type="text" name="description" id="descriptionField" required><br><br>
+
+        <button type="submit">Submit</button>
+    </div>
+</form>
+</body>
+
+<script>
+    let productId;
+    loadProductDetails();
+
+    async function formDeserialize(form, data) {
+        for (const [key, val] of (new URLSearchParams(data)).entries()) {
+            const input = form.elements[key];
+            if (input.type === 'checkbox') {
+                input.checked = !!val;
+            } else {
+                input.value = val;
+            }
+        }
+    }
+
+    async function populateFormData(data) {
+        const form = document.getElementById("edit-form");
+        const formData = new FormData();
+
+        formData.append("title", data.title);
+        formData.append("author", data.author);
+        formData.append("publishDate", data.publishDate);
+        formData.append("category", data.category);
+        formData.append("description", data.description);
+        console.log({formData});
+        await formDeserialize(form, formData);
+    }
+
+    async function loadProductDetails() {
+        const params = new URLSearchParams(window.location.search);
+        productId = params.get('id');
+        try {
+            const response = await fetch(`/product/${productId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                await populateFormData(responseData);
+            } else {
+                const errorData = await response.json();
+                window.alert('Fetch Product failed: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('edit-form');
+        form.addEventListener('submit', submitForm);
+    });
+
+    async function submitForm(e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+        try {
+            const response = await fetch(`/product/${productId}`, {
+                method: 'PATCH',
+                body: JSON.stringify(Object.fromEntries(formData)),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                window.alert(responseData.message);
+                window.location.assign('/Product/admin-index.html');
+            } else {
+                const errorData = await response.json();
+                window.alert('Create Product failed: ' + errorData.message); // Show an alert with the error message
+            }
+        } catch (error) {
+            console.error('Error during product creation:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+
+    }
+
+</script>
+</html>

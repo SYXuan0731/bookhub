@@ -32,8 +32,34 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const logoutLink = document.querySelector('a[href="/logout"]');
+            const productLink = document.querySelector('a[href="/product-redirect"]');
             logoutLink.addEventListener('click', handleLogout);
+            productLink.addEventListener('click', handleProductRedirect);
         });
+
+        async function handleProductRedirect(event) {
+            event.preventDefault();
+
+            try {
+                const response = await fetch('/product-redirect', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    // window.alert(responseData.message);
+                    console.log(responseData.redirect)
+                    // Redirect to the specified location
+                    window.location.assign(responseData.redirect);
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                window.alert('An error occurred. Please try again.');
+            }
+        }
 
     </script>
 </head>
@@ -86,7 +112,7 @@
                                  "/images/w1.png"
                          class="nav-img"
                          alt="books">
-                    <a href="" style="color: #4b49ac"><h3>Books</h3></a>
+                    <a href="/product-redirect" style="color: #4b49ac"><h3>Books</h3></a>
                 </div>
 
                 <div class="nav-option option4">
