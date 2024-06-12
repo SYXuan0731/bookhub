@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+<a href="" id="editButton">Edit</a>
+<button id="deleteButton" onclick="deleteProduct()">Delete</button>
+<pre id="product"></pre>
+</body>
+
+<script>
+    let product;
+    let productId;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        handleUserRole();
+        fetchProduct();
+    });
+
+    function handleUserRole() {
+        // get product id
+        const params = new URLSearchParams(window.location.search);
+        productId = params.get('id');
+
+        // check where user redirects from
+        const prevURL = document.referrer;
+        if (prevURL.toLowerCase().includes("customer")) role = "customer";
+        else role = "admin"
+
+        // update action button attributes
+        const editButton = document.getElementById("editButton")
+        if (role === "customer") {
+            console.log("is customer ")
+            const deleteButton = document.getElementById("deleteButton")
+            editButton.style.display = "none";
+            deleteButton.style.display = "none";
+        } else {
+            editButton.href = `/Product/product-edit.html?id=${productId}`;
+        }
+    }
+
+    async function deleteProduct() {
+        if (confirm("Are you sure?") === false) return;
+        try {
+            const response = await fetch(`/product/${productId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                window.alert("Deleted Successfully");
+                window.location.assign("product-index.html")
+            } else {
+                const errorData = await response.json();
+                window.alert('Delete Product failed: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+    async function fetchProduct() {
+        try {
+            const response = await fetch(`/product/${productId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log({responseData})
+                product = Object.freeze(responseData);
+                await displayProduct();
+            } else {
+                const errorData = await response.json();
+                window.alert('Fetch Product failed: ' + errorData.message);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            window.alert('An error occurred. Please try again.');
+        }
+    }
+
+    async function displayProduct() {
+        const productText = document.getElementById("product");
+        productText.innerHTML = JSON.stringify(product);
+    }
+</script>
+</html>

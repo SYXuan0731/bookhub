@@ -22,23 +22,25 @@ public class ProductController {
     }
 
     @GetMapping("/product-redirect")
-    public ResponseEntity redirect() {
+    public ResponseEntity redirect(HttpSession session) {
+        checkUserAuth(session);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Redirected to successfully");
-        response.put("redirect", "../Product/admin-index.html");
+        response.put("redirect", "../Product/product-index.html");
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/products")
-    public ResponseEntity<List<Product>> getProducts() {
+    public ResponseEntity<List<Product>> getProducts(HttpSession session) {
+        checkUserAuth(session);
         System.out.println(this.productRepository.findAll());
         return ResponseEntity.ok(this.productRepository.findAll());
     }
 
     @RequestMapping(value = "/product/{id}", method = RequestMethod.GET)
-    public ResponseEntity getProductById(@PathVariable String id) {
-//        checkUserAuth(session);
+    public ResponseEntity getProductById(@PathVariable String id, HttpSession session) {
+        checkUserAuth(session);
 
         Optional<Product> product = Optional.ofNullable(this.productRepository.findByProductId(id));
 
@@ -86,7 +88,8 @@ public class ProductController {
 //    }
 
     @PostMapping("/product")
-    public ResponseEntity<Map<String, String>> createProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<Map<String, String>> createProduct(@RequestBody ProductRequest productRequest, HttpSession session) {
+        checkUserAuth(session);
 
         Product product = new Product();
         product.setTitle(productRequest.getTitle());
@@ -101,13 +104,14 @@ public class ProductController {
         // Create the response message and redirect URL
         Map<String, String> response = new HashMap<>();
         response.put("message", "Add New Product Successfully");
-        response.put("redirect", "../Product/admin-index.html");
+        response.put("redirect", "../Product/product-index.html");
 
         return ResponseEntity.ok(response);
     }
 
     @PatchMapping("/product/{id}")
-    public ResponseEntity updateProductById(@PathVariable String id, @RequestBody ProductRequest productRequest) {
+    public ResponseEntity updateProductById(@PathVariable String id, @RequestBody ProductRequest productRequest, HttpSession session) {
+        checkUserAuth(session);
 
         Optional<Product> product = Optional.ofNullable(this.productRepository.findByProductId(id));
         if (product.isPresent()) {
@@ -123,7 +127,7 @@ public class ProductController {
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Product Updated successfully");
-            response.put("redirect", "/admin/admin-index.html");
+            response.put("redirect", "/admin/product-index.html");
 
             return ResponseEntity.ok(response);
         } else {

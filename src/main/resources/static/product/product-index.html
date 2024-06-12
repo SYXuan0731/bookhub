@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Products</title>
+    <link rel="icon" href="/images/logo.png" type="image/png">
+    <title>Admin Dashboard</title>
     <link rel="stylesheet" type="text/css" href="../css/table-main.css"/>
 </head>
 <body>
-<a href="/Product/admin-create.html"> Add Products</a>
+<a href="/Product/product-create.html" id="add-products"> Add Products</a>
 <label for="search">Search</label>
 <input onkeyup="filterProducts()" type="text" name="search" id="search"
        placeholder="search for book title, author or id">
@@ -36,8 +37,21 @@
 <script>
 
     const headers = ['productId', 'title', 'author', 'publishDate', 'category', 'description'];
-    let products;
+    let products, role;
+
     fetchProducts();
+
+    document.addEventListener("DOMContentLoaded", handleUserRole);
+
+    function handleUserRole() {
+        const prevURL = document.referrer;
+        if (prevURL.toLowerCase().includes("customer")) role = "customer";
+        else role = "admin"
+        if (role === "customer") {
+            const addLink = document.getElementById("add-products")
+            addLink.style.display = "none";
+        }
+    }
 
     async function deleteProduct(productId) {
         try {
@@ -88,20 +102,36 @@
                 td.innerHTML = data[j][headers[i]];
                 tr2.append(td);
             }
-            // append edit and delete button
+
+            // append view
             const td2 = document.createElement("td")
-            const edit = document.createElement("a")
-            edit.href = `/Product/admin-edit.html?id=${data[j].productId}`
-            edit.innerHTML = "edit";
-            td2.append(edit)
+            const view = document.createElement("a")
+            view.href = `/Product/product-view.html?id=${data[j].productId}`
+            view.innerHTML = "view";
+            td2.append(view)
+            tr2.append(td2);
+
+            // if customer then exclude action buttons
+            if (role === "customer") {
+                tbody.append(tr2);
+                continue;
+            }
+
+            // append edit and delete button
             const td3 = document.createElement("td")
+            const edit = document.createElement("a")
+            edit.href = `/Product/product-edit.html?id=${data[j].productId}`
+            edit.innerHTML = "edit";
+            td3.append(edit)
+            const td4 = document.createElement("td")
             const del = document.createElement("button")
             del.onclick = () => deleteProduct(data[j].productId);
             del.innerHTML = "delete";
-            td3.append(del)
-            //append action button to row
-            tr2.append(td2);
+            td4.append(del)
+
+            //append action buttons to row
             tr2.append(td3);
+            tr2.append(td4);
             tbody.append(tr2)
         }
         table.append(tbody);
@@ -139,7 +169,7 @@
         if (searchInput === "" && categorySelect === "")
             return await populateData(headers, products);
         const filteredProducts = products.filter(product => {
-                return (product.title.includes(searchInput) || product.author.includes(searchInput)) && product.category === categorySelect;
+                return (product.title.includes(searchInput) || product.author.includes(searchInput)) && product.category.includes(categorySelect);
             }
         )
         console.log({filteredProducts});
