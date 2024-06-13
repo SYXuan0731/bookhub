@@ -4,7 +4,45 @@
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
     <link rel="icon" href="/images/logo.png" type="image/png">
-    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        #books table img {
+            height: 86px;
+            width: 50px;
+        }
+
+        #books table td {
+            max-width: 150px;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        #books button, a, th, label {
+            text-transform: capitalize;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .selected-nav {
+            background: var(--Border-color) !important;
+        }
+
+        .selected-nav h3 {
+            color: white;
+        }
+
+        .unselected-nav {
+            background: white !important;
+        }
+
+        .unselected-nav h3 {
+            color: var(--Border-color) !important;
+        }
+    </style>
     <script>
         async function handleLogout(event) {
             event.preventDefault();
@@ -30,37 +68,29 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const logoutLink = document.querySelector('a[href="/logout"]');
-            const productLink = document.querySelector('a[href="/product-redirect"]');
             logoutLink.addEventListener('click', handleLogout);
-            productLink.addEventListener('click', handleProductRedirect);
+            navigateToSection();
         });
 
-        async function handleProductRedirect(event) {
-            event.preventDefault();
-
-            try {
-                const response = await fetch('/product-redirect', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const responseData = await response.json();
-                    // window.alert(responseData.message);
-                    console.log(responseData.redirect)
-                    // Redirect to the specified location
-                    window.location.assign(responseData.redirect);
-                }
-            } catch (error) {
-                console.error('Error during logout:', error);
-                window.alert('An error occurred. Please try again.');
-            }
+        function navigateToSection() {
+            const sectionIds = ["books", "dashboard"];
+            document.querySelectorAll("a[href='#books'], a[href='#']").forEach(ele => {
+                console.log("queried ");
+                ele.addEventListener("click", function (ev) {
+                    console.log("clicked");
+                    ev.preventDefault();
+                    console.log(ele.parentElement);
+                    ele.parentElement.classList.toggle("selected-nav");
+                    ele.parentElement.classList.toggle("unselected-nav");
+                    sectionIds.forEach(id => {
+                        console.log("toggle ", id);
+                        document.getElementById(id).classList.toggle("hidden")
+                    })
+                })
+            })
         }
-
     </script>
 </head>
 <body>
@@ -68,8 +98,7 @@
 <header>
 
     <div class="logosec">
-        <img src=
-                     "https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
+        <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182541/Untitled-design-(30).png"
              class="icn menuicn"
              id="menuicn"
              alt="menu-icon">
@@ -78,8 +107,7 @@
 
     <div class="message">
         <div class="dp">
-            <img src=
-                         "https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
+            <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210180014/profile-removebg-preview.png"
                  class="dpicn"
                  alt="dp">
         </div>
@@ -91,49 +119,43 @@
     <div class="navcontainer">
         <nav class="nav">
             <div class="nav-upper-options">
-                <div class="nav-option option1">
-                    <img src=
-                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
+                <div class="nav-option option1 selected-nav">
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210182148/Untitled-design-(29).png"
                          class="nav-img"
                          alt="dashboard">
-                    <a href="" style="color: white"><h3>Dashboard</h3></a>
+                    <a href="#" style="color: white"><h3>Dashboard</h3></a>
                 </div>
 
                 <div class="option2 nav-option">
-                    <img src=
-                                 "/images/user.png"
+                    <img src="/images/user.png"
                          class="nav-img"
                          alt="users">
                     <a href="/admin/list-user.html" style="color: #4b49ac"><h3>Users</h3></a>
                 </div>
 
-                <div class="nav-option option3">
-                    <img src=
-                                 "/images/w1.png"
+                <div class="nav-option option3 unselected-nav">
+                    <img src="/images/w1.png"
                          class="nav-img"
                          alt="books">
-                    <a href="/product-redirect" style="color: #4b49ac"><h3>Books</h3></a>
+                    <a href="#books" style="color: #4b49ac"><h3>Books</h3></a>
                 </div>
 
                 <div class="nav-option option4">
-                    <img src=
-                                 "/images/comment.png"
+                    <img src="/images/comment.png"
                          class="nav-img"
                          alt="comments">
                     <a href="" style="color: #4b49ac"><h3>Comments</h3></a>
                 </div>
 
                 <div class="nav-option option5">
-                    <img src=
-                                 "/images/user-profile.png"
+                    <img src="/images/user-profile.png"
                          class="nav-img"
                          alt="user-profile">
                     <a href="profile.html" style="color: #4b49ac"><h3>User Profile</h3></a>
                 </div>
 
                 <div class="nav-option logout">
-                    <img src=
-                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
+                    <img src="https://media.geeksforgeeks.org/wp-content/uploads/20221210183321/7.png"
                          class="nav-img"
                          alt="logout">
                     <a href="/logout" style="color: #4b49ac"><h3>Logout</h3></a>
@@ -143,69 +165,104 @@
         </nav>
     </div>
     <div class="main">
-
-        <div class="searchbar2">
-            <label for=""></label><input type="text"
-                                         name=""
-                                         id=""
-                                         placeholder="Search">
-            <div class="searchbtn">
-                <img src=
-                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
-                     class="icn srchicn"
-                     alt="search-button">
+        <section id="dashboard">
+            <div class="searchbar2">
+                <label for=""></label><input type="text"
+                                             name=""
+                                             id=""
+                                             placeholder="Search">
+                <div class="searchbtn">
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210180758/Untitled-design-(28).png"
+                         class="icn srchicn"
+                         alt="search-button">
+                </div>
             </div>
-        </div>
 
-        <div class="box-container">
+            <div class="box-container">
 
-            <div class="box box1">
-                <div class="text">
-                    <h2 class="topic-heading">60.5k</h2>
-                    <h2 class="topic">Visitors</h2>
+                <div class="box box1">
+                    <div class="text">
+                        <h2 class="topic-heading">60.5k</h2>
+                        <h2 class="topic">Visitors</h2>
+                    </div>
+
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
+                         alt="Views">
                 </div>
 
-                <img src=
-                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(31).png"
-                     alt="Views">
-            </div>
+                <div class="box box2">
+                    <div class="text">
+                        <h2 class="topic-heading">150</h2>
+                        <h2 class="topic">Users</h2>
+                    </div>
 
-            <div class="box box2">
-                <div class="text">
-                    <h2 class="topic-heading">150</h2>
-                    <h2 class="topic">Users</h2>
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png"
+                         alt="likes">
+                </div>
+            </div>
+            <div class="box-container">
+                <div class="box box3">
+                    <div class="text">
+                        <h2 class="topic-heading">320</h2>
+                        <h2 class="topic">Comments</h2>
+                    </div>
+
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
+                         alt="comments">
                 </div>
 
-                <img src=
-                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210185030/14.png"
-                     alt="likes">
-            </div>
-        </div>
-        <div class="box-container">
-            <div class="box box3">
-                <div class="text">
-                    <h2 class="topic-heading">320</h2>
-                    <h2 class="topic">Comments</h2>
+                <div class="box box4">
+                    <div class="text">
+                        <h2 class="topic-heading">70</h2>
+                        <h2 class="topic">Published</h2>
+                    </div>
+
+                    <img src=
+                                 "https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png"
+                         alt="published">
                 </div>
-
-                <img src=
-                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210184645/Untitled-design-(32).png"
-                     alt="comments">
             </div>
+        </section>
 
-            <div class="box box4">
-                <div class="text">
-                    <h2 class="topic-heading">70</h2>
-                    <h2 class="topic">Published</h2>
-                </div>
-
-                <img src=
-                             "https://media.geeksforgeeks.org/wp-content/uploads/20221210185029/13.png" alt="published">
+        <section id="books" class="hidden">
+            <a href="/Admin/product-create.html" id="add-products" class="btn btn-primary float-end"> Add Products</a>
+            <div class="mt-3 mb-5">
+                <label for="search" class="form-label">Search</label>
+                <input onkeyup="filterProducts()" type="text" name="search" id="search" class="form-control"
+                       placeholder="search for book title, author or id">
+                <select name="category" id="category" onchange="filterProducts()" class="form-control">
+                    <option selected value>Choose Category</option>
+                    <option value="Adventure stories">Adventure stories</option>
+                    <option value="Classics">Classics</option>
+                    <option value="Crime">Crime</option>
+                    <option value="Fairy tales, fables, and folk tales">Fairy tales, fables, and folk tales</option>
+                    <option value="Fantasy">Fantasy</option>
+                    <option value="Historical fiction">Historical fiction</option>
+                    <option value="Horror">Horror</option>
+                    <option value="Humour and satire">Humour and satire</option>
+                    <option value="Literary fiction">Literary fiction</option>
+                    <option value="Mystery">Mystery</option>
+                    <option value="Poetry">Poetry</option>
+                    <option value="Plays">Plays</option>
+                    <option value="Romance">Romance</option>
+                    <option value="Science fiction">Science fiction</option>
+                    <option value="Short stories">Short stories</option>
+                    <option value="Thrillers">Thrillers</option>
+                    <option value="War">War</option>
+                    <option value="Women’s fiction">Women’s fiction</option>
+                    <option value="Young adult">Young adult</option>
+                </select>
             </div>
-        </div>
+            <table id="table" class="table table-striped"></table>
+        </section>
     </div>
 </div>
 
 <script src="../js/dashboard.js"></script>
+<script src="../js/admin-product-dashboard.js"></script>
 </body>
 </html>
