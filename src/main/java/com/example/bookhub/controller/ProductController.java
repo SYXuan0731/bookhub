@@ -26,7 +26,7 @@ public class ProductController {
         checkUserAuth(session);
         Map<String, String> response = new HashMap<>();
         response.put("message", "Redirected to successfully");
-        response.put("redirect", "../Product/product-index.html");
+        response.put("redirect", "../Admin/product-index.html");
 
         return ResponseEntity.ok(response);
     }
@@ -104,7 +104,7 @@ public class ProductController {
         // Create the response message and redirect URL
         Map<String, String> response = new HashMap<>();
         response.put("message", "Add New Product Successfully");
-        response.put("redirect", "../Product/product-index.html");
+        response.put("redirect", "../Admin/product-index.html");
 
         return ResponseEntity.ok(response);
     }

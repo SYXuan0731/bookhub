@@ -4,21 +4,29 @@
     <meta charset="UTF-8">
     <link rel="icon" href="/images/logo.png" type="image/png">
     <title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        label {
+            text-transform: capitalize;
+        }
+    </style>
 </head>
 <body>
-<form onsubmit="submitForm" method="POST" id="create-form">
-    <div>
-        <label for="titleField">title</label>
-        <input type="text" name="title" id="titleField" required><br><br>
+<div class="container w-50 m-auto">
+    <form method="POST" id="create-form" class="form my-5">
+        <h3 class="mb-3">Create Product</h3>
+        <label class="form-label" for="titleField">title</label>
+        <input class="form-control" type="text" name="title" id="titleField" required><br><br>
 
-        <label for="authorField">author</label>
-        <input type="text" name="author" id="authorField" required><br><br>
+        <label class="form-label" for="authorField">author</label>
+        <input class="form-control" type="text" name="author" id="authorField" required><br><br>
 
-        <label for="publishDateField">publishDate</label>
-        <input type="date" name="publishDate" id="publishDateField" required><br><br>
+        <label class="form-label" for="publishDateField">publishDate</label>
+        <input class="form-control" type="date" name="publishDate" id="publishDateField" required><br><br>
 
-        <label for="categoryField">category</label>
-        <select name="category" id="categoryField">
+        <label class="form-label" for="categoryField">category</label>
+        <select name="category" id="categoryField" class="form-control">
             <option disabled selected>Choose Category</option>
             <option value="Adventure stories">Adventure stories</option>
             <option value="Classics">Classics</option>
@@ -41,12 +49,12 @@
             <option value="Young adult">Young adult</option>
         </select><br><br>
 
-        <label for="descriptionField">description</label>
-        <input type="text" name="description" id="descriptionField" required><br><br>
+        <label class="form-label" for="descriptionField">description</label>
+        <input class="form-control" type="text" name="description" id="descriptionField" required><br><br>
 
-        <button type="submit">Submit</button>
-    </div>
-</form>
+        <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+</div>
 </body>
 
 <script>

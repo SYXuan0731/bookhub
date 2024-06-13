@@ -4,8 +4,31 @@
     <meta charset="UTF-8">
     <title>Customer Dashboard</title>
     <link rel="icon" href="/images/logo.png" type="image/png">
-    <link rel="stylesheet" type="text/css" href="../css/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="../css/dashboard.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        table img {
+            height: 86px;
+            width: 50px;
+        }
+
+        table td {
+            max-width: 150px;
+            text-wrap: balance;
+            overflow-wrap: break-word;
+        }
+
+        button, a, th, label {
+            text-transform: capitalize;
+        }
+    </style>
     <script>
+        const headers = ['productId', 'title', 'author', 'publishDate', 'category', 'description', "image"];
+        let products, role;
+
+        fetchProducts();
+
         async function handleLogout(event) {
             event.preventDefault();
 
@@ -30,35 +53,38 @@
             }
         }
 
-        async function handleProductRedirect(event) {
-            event.preventDefault();
+        // async function handleProductRedirect(event) {
+        //     event.preventDefault();
+        //
+        //     try {
+        //         const response = await fetch('/product-redirect', {
+        //             method: 'GET',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             }
+        //         });
+        //
+        //         if (response.ok) {
+        //             const responseData = await response.json();
+        //             // window.alert(responseData.message);
+        //             console.log(responseData.redirect)
+        //             // Redirect to the specified location
+        //             window.location.assign(responseData.redirect);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error during logout:', error);
+        //         window.alert('An error occurred. Please try again.');
+        //     }
+        // }
 
-            try {
-                const response = await fetch('/product-redirect', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (response.ok) {
-                    const responseData = await response.json();
-                    // window.alert(responseData.message);
-                    console.log(responseData.redirect)
-                    // Redirect to the specified location
-                    window.location.assign(responseData.redirect);
-                }
-            } catch (error) {
-                console.error('Error during logout:', error);
-                window.alert('An error occurred. Please try again.');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.location.href.toLowerCase().indexOf("customer"))
+                role = "customer"
+            else role = "admin"
             const logoutLink = document.querySelector('a[href="/logout"]');
-            const productLink = document.querySelector('a[href="/product-redirect"]');
+            // const productLink = document.querySelector('a[href="/product-redirect"]');
             logoutLink.addEventListener('click', handleLogout);
-            productLink.addEventListener('click', handleProductRedirect);
+            // productLink.addEventListener('click', handleProductRedirect);
         })
 
         // document.addEventListener('DOMContentLoaded', (event) => {
@@ -67,6 +93,117 @@
         //     const profileLink = document.getElementById('profileLink');
         //     profileLink.href = `profile.html?userId=${encodeURIComponent(userId)}`;
         // });
+        async function deleteProduct(productId) {
+            try {
+                const response = await fetch(`/product/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    window.alert("Deleted Successfully");
+                    await fetchProducts();
+                } else {
+                    const errorData = await response.json();
+                    window.alert('Delete Product failed: ' + errorData.message);
+                }
+            } catch (error) {
+                console.error('Error deleting product:', error);
+                window.alert('An error occurred. Please try again.');
+            }
+        }
+
+        async function populateData(headers, data) {
+            const table = document.getElementById("table");
+            // clear table
+            table.innerHTML = "";
+            if (data.length === 0) {
+                const noData = document.createElement("p");
+                noData.innerHTML = "No Data Found";
+                table.append(noData);
+            }
+
+            const thead = document.createElement("thead");
+            const tr = document.createElement("tr")
+            for (let i = 0; i <= headers.length - 1; i++) {
+                const td = document.createElement("th")
+                td.innerHTML = headers[i];
+                tr.append(td);
+            }
+            thead.append(tr);
+            table.append(thead);
+            const tbody = document.createElement("tbody");
+            for (let j = 0; j <= data.length - 1; j++) {
+                const tr2 = document.createElement("tr")
+                for (let i = 0; i <= headers.length - 1; i++) {
+                    const td = document.createElement("td")
+                    if (headers[i] === "image") {
+                        const image = document.createElement("img")
+                        image.src = data[j][headers[i]];
+                        td.append(image);
+                    } else {
+                        td.innerHTML = data[j][headers[i]];
+                    }
+                    tr2.append(td);
+                }
+
+                // append view
+                const td2 = document.createElement("td")
+                const view = document.createElement("a")
+                view.href = `/Customer/product-view.html?id=${data[j].productId}`
+                view.innerHTML = "view";
+                view.classList.add("link-success");
+                view.classList.add("link-offset-2")
+                td2.append(view)
+                tr2.append(td2);
+
+                tbody.append(tr2);
+            }
+            table.append(tbody);
+        }
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch('/products', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log({responseData})
+                    products = Object.freeze(responseData);
+                    await filterProducts();
+                } else {
+                    const errorData = await response.json();
+                    window.alert('Fetch Product failed: ' + errorData.message);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                window.alert('An error occurred. Please try again.');
+            }
+        }
+
+        async function filterProducts() {
+            const searchInput = document.getElementById("search").value.toLowerCase();
+            const categorySelect = document.getElementById(("category")).value.toLowerCase();
+
+            console.log(searchInput, categorySelect, products);
+            if (searchInput === "" && categorySelect === "")
+                return await populateData(headers, products);
+            const filteredProducts = products.filter(product => {
+                    const title = product.title;
+                    const author = product.author;
+                    return (title.includes(searchInput) || author.includes(searchInput)) && product.category.includes(categorySelect);
+                }
+            )
+            console.log({filteredProducts});
+            await populateData(headers, filteredProducts);
+        }
     </script>
 </head>
 <body>
@@ -131,6 +268,36 @@
 
             </div>
         </nav>
+    </div>
+    <div class="container">
+        <div class="mt-3 mb-5">
+            <label for="search" class="form-label">Search</label>
+            <input onkeyup="filterProducts()" type="text" name="search" id="search"
+                   placeholder="search for book title, author or id" class="form-control">
+            <select name="category" id="category" onchange="filterProducts()" class="form-control">
+                <option selected value>Choose Category</option>
+                <option value="Adventure stories">Adventure stories</option>
+                <option value="Classics">Classics</option>
+                <option value="Crime">Crime</option>
+                <option value="Fairy tales, fables, and folk tales">Fairy tales, fables, and folk tales</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Historical fiction">Historical fiction</option>
+                <option value="Horror">Horror</option>
+                <option value="Humour and satire">Humour and satire</option>
+                <option value="Literary fiction">Literary fiction</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Poetry">Poetry</option>
+                <option value="Plays">Plays</option>
+                <option value="Romance">Romance</option>
+                <option value="Science fiction">Science fiction</option>
+                <option value="Short stories">Short stories</option>
+                <option value="Thrillers">Thrillers</option>
+                <option value="War">War</option>
+                <option value="Women’s fiction">Women’s fiction</option>
+                <option value="Young adult">Young adult</option>
+            </select>
+        </div>
+        <table id="table" class="table table-striped"></table>
     </div>
 </div>
 
