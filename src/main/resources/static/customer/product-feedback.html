@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Feedback</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        let loggedInUserId;
+
+        async function getUserId() {
+            try {
+                const response = await fetch('/user/profile');
+                if (response.ok) {
+                    const userData = await response.json();
+                    loggedInUserId = userData.id;
+                    return userData.id;
+                } else {
+                    console.error('Failed to fetch user ID');
+                }
+            } catch (error) {
+                console.error('Error fetching user ID:', error);
+            }
+        }
+
+        async function getUserName(userId) {
+            try {
+                const response = await fetch(`/user/${userId}`);
+                if (response.ok) {
+                    const userData = await response.json();
+                    return userData.name;
+                } else {
+                    console.error(`Failed to fetch user details for user ID: ${userId}`);
+                }
+            } catch (error) {
+                console.error(`Error fetching user details for user ID: ${userId}`, error);
+            }
+        }
+
+        async function submitFeedback() {
+            const userId = await getUserId();
+            const productId = new URLSearchParams(window.location.search).get('id');
+            const comment = document.getElementById('comment').value;
+
+            if (!userId) {
+                alert('User not logged in');
+                return;
+            }
+
+            const response = await fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId, productId, comment, createdDate: new Date().toISOString() }),
+            });
+
+            if (response.ok) {
+                alert('Feedback submitted successfully');
+                document.getElementById('feedbackForm').reset();
+                await fetchFeedback(); // Fetch and display the updated feedback list
+            } else {
+                alert('Error submitting feedback');
+            }
+        }
+
+        async function fetchFeedback() {
+            const productId = new URLSearchParams(window.location.search).get('id');
+            const response = await fetch(`/feedback/product/${productId}`);
+            if (response.ok) {
+                const feedbackList = await response.json();
+                await displayFeedback(feedbackList);
+            } else {
+                console.error('Failed to fetch feedback');
+            }
+        }
+
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+            return new Date(dateString).toLocaleString('en-GB', options);
+        }
+
+        async function displayFeedback(feedbackList) {
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            feedbackContainer.innerHTML = '';
+            for (const feedback of feedbackList) {
+                const userName = await getUserName(feedback.userId);
+                const feedbackElement = document.createElement('div');
+                feedbackElement.classList.add('card', 'mb-3');
+                feedbackElement.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">${userName}</h5>
+                        <p class="card-text">${feedback.comment}</p>
+                        <p class="card-text"><small class="text-muted">Posted on ${formatDate(feedback.createdDate)}</small></p>
+                        ${feedback.userId === loggedInUserId ? `
+                        <button class="btn btn-warning" onclick="editFeedback('${feedback.id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteFeedback('${feedback.id}')">Delete</button>` : ''}
+                    </div>
+                `;
+                feedbackContainer.appendChild(feedbackElement);
+            }
+        }
+
+        async function editFeedback(feedbackId) {
+            const newComment = prompt("Edit your comment:");
+            if (newComment) {
+                const response = await fetch(`/feedback/${feedbackId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ comment: newComment }),
+                });
+                if (response.ok) {
+                    alert('Feedback updated successfully');
+                    await fetchFeedback(); // Fetch and display the updated feedback list
+                } else {
+                    alert('Error updating feedback');
+                }
+            }
+        }
+
+        async function deleteFeedback(feedbackId) {
+            const response = await fetch(`/feedback/${feedbackId}`, {
+                method: 'DELETE',
+            });
+            if (response.ok) {
+                alert('Feedback deleted successfully');
+                await fetchFeedback(); // Fetch and display the updated feedback list
+            } else {
+                alert('Error deleting feedback');
+            }
+        }
+
+        window.onload = async function() {
+            const userId = await getUserId();
+            if (!userId) {
+                document.getElementById('feedbackFormContainer').innerHTML = '<div class="alert alert-warning">Please log in to submit feedback.</div>';
+            } else {
+                await fetchFeedback(); // Fetch and display the feedback list on page load
+            }
+        };
+    </script>
+</head>
+<body>
+<div class="container mt-5">
+    <h1 class="mb-4">Submit Feedback</h1>
+    <div id="feedbackFormContainer">
+        <form id="feedbackForm" onsubmit="event.preventDefault(); submitFeedback();">
+            <div class="form-group">
+                <label for="comment">Comment:</label>
+                <textarea id="comment" name="comment" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit Feedback</button>
+        </form>
+    </div>
+    <h2 class="mt-5">Feedback List</h2>
+    <div id="feedbackContainer"></div>
+</div>
+
+<!-- Include Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
