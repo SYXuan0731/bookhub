@@ -6,11 +6,7 @@
     <title>Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <style>
-        label {
-            text-transform: capitalize;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="../css/product.css"/>
 </head>
 <body>
 <div class="container w-50 m-auto">
@@ -57,91 +53,14 @@
 </div>
 </body>
 
+<script src="../js/product.js"></script>
 <script>
     let productId;
     loadProductDetails();
 
-    async function formDeserialize(form, data) {
-        for (const [key, val] of (new URLSearchParams(data)).entries()) {
-            const input = form.elements[key];
-            if (input.type === 'checkbox') {
-                input.checked = !!val;
-            } else {
-                input.value = val;
-            }
-        }
-    }
-
-    async function populateFormData(data) {
-        const form = document.getElementById("edit-form");
-        const formData = new FormData();
-
-        formData.append("title", data.title);
-        formData.append("author", data.author);
-        formData.append("publishDate", data.publishDate);
-        formData.append("category", data.category);
-        formData.append("description", data.description);
-        console.log({formData});
-        await formDeserialize(form, formData);
-    }
-
-    async function loadProductDetails() {
-        const params = new URLSearchParams(window.location.search);
-        productId = params.get('id');
-        try {
-            const response = await fetch(`/product/${productId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                await populateFormData(responseData);
-            } else {
-                const errorData = await response.json();
-                window.alert('Fetch Product failed: ' + errorData.message);
-            }
-        } catch (error) {
-            console.error('Error during login:', error);
-            window.alert('An error occurred. Please try again.');
-        }
-    }
-
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('edit-form');
-        form.addEventListener('submit', submitForm);
+        form.addEventListener('submit', submitFormEdit);
     });
-
-    async function submitForm(e) {
-        e.preventDefault();
-
-        const form = e.target;
-        const formData = new FormData(form);
-        try {
-            const response = await fetch(`/product/${productId}`, {
-                method: 'PATCH',
-                body: JSON.stringify(Object.fromEntries(formData)),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                window.alert(responseData.message);
-                window.location.assign('product-index.html');
-            } else {
-                const errorData = await response.json();
-                window.alert('Create Product failed: ' + errorData.message); // Show an alert with the error message
-            }
-        } catch (error) {
-            console.error('Error during product creation:', error);
-            window.alert('An error occurred. Please try again.');
-        }
-
-    }
-
 </script>
 </html>

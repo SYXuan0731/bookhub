@@ -1,0 +1,14 @@
+table img {
+    height: 86px;
+    width: 50px;
+}
+
+table td {
+    max-width: 150px;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+}
+
+button, a, th, label {
+    text-transform: capitalize;
+}
