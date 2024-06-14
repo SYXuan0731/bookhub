@@ -6,7 +6,11 @@ import com.example.bookhub.resource.ProductRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +19,7 @@ import java.util.Optional;
 @RestController
 public class ProductController {
     private final ProductRepository productRepository;
-
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
     public ProductController(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -51,52 +55,23 @@ public class ProductController {
         }
     }
 
-//    @RequestMapping(value = "/{title}", method = RequestMethod.GET)
-//    public ResponseEntity getProductByTitle(@PathVariable String title) {
-//
-//        Optional<Product> product = Optional.ofNullable(this.productRepository.findByTitle(title));
-//
-//        if (product.isPresent()) {
-//            return ResponseEntity.ok(product.get());
-//        } else {
-//            return ResponseEntity.ok("The product with id: " + title + " was not found.");
-//        }
-//    }
-//
-//    @RequestMapping(value = "/{category}", method = RequestMethod.GET)
-//    public ResponseEntity getProductByCategory(@PathVariable String category) {
-//
-//        Optional<Product> product = Optional.ofNullable(this.productRepository.findByCategory(category));
-//
-//        if (product.isPresent()) {
-//            return ResponseEntity.ok(product.get());
-//        } else {
-//            return ResponseEntity.ok("The product with id: " + category + " was not found.");
-//        }
-//    }
-//
-//    @RequestMapping(value = "/{author}", method = RequestMethod.GET)
-//    public ResponseEntity getProductByAuthor(@PathVariable String author) {
-//
-//        Optional<Product> product = Optional.ofNullable(this.productRepository.findByAuthor(author));
-//
-//        if (product.isPresent()) {
-//            return ResponseEntity.ok(product.get());
-//        } else {
-//            return ResponseEntity.ok("The product with id: " + author + " was not found.");
-//        }
-//    }
-
     @PostMapping("/product")
-    public ResponseEntity<Map<String, String>> createProduct(@RequestBody ProductRequest productRequest, HttpSession session) {
+    public ResponseEntity<Map<String, String>> createProduct(@RequestParam String title, @RequestParam String author, @RequestParam String publishDate, @RequestParam String category, @RequestParam String description, @RequestParam("image") MultipartFile image, HttpSession session) throws Exception {
         checkUserAuth(session);
 
+        // Add file to local
+        StringBuilder fileName = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, image.getOriginalFilename());
+        fileName.append(image.getOriginalFilename());
+        Files.write(fileNameAndPath, image.getBytes());
+
         Product product = new Product();
-        product.setTitle(productRequest.getTitle());
-        product.setAuthor(productRequest.getAuthor());
-        product.setPublishDate(productRequest.getPublishDate());
-        product.setCategory(productRequest.getCategory());
-        product.setDescription(productRequest.getDescription());
+        product.setTitle(title);
+        product.setAuthor(author);
+        product.setPublishDate(publishDate);
+        product.setCategory(category);
+        product.setDescription(description);
+        product.setImage("/images/" +fileName.toString());
 
         // Save the user to the database
         Product savedProduct = this.productRepository.save(product);
@@ -110,19 +85,27 @@ public class ProductController {
     }
 
     @PatchMapping("/product/{id}")
-    public ResponseEntity updateProductById(@PathVariable String id, @RequestBody ProductRequest productRequest, HttpSession session) {
+    public ResponseEntity updateProductById(@PathVariable String id, @RequestParam String title, @RequestParam String author, @RequestParam String publishDate, @RequestParam String category, @RequestParam String description, @RequestParam("image") MultipartFile image, HttpSession session) throws Exception {
         checkUserAuth(session);
+
+
+
+        // Add file to local
+        StringBuilder fileName = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, image.getOriginalFilename());
+        fileName.append(image.getOriginalFilename());
+        Files.write(fileNameAndPath, image.getBytes());
 
         Optional<Product> product = Optional.ofNullable(this.productRepository.findByProductId(id));
         if (product.isPresent()) {
             Product updatedProduct = product.get();
 
-            updatedProduct.setId(id);
-            updatedProduct.setTitle(productRequest.getTitle());
-            updatedProduct.setAuthor(productRequest.getAuthor());
-            updatedProduct.setPublishDate(productRequest.getPublishDate());
-            updatedProduct.setCategory(productRequest.getCategory());
-            updatedProduct.setDescription(productRequest.getDescription());
+            updatedProduct.setTitle(title);
+            updatedProduct.setAuthor(author);
+            updatedProduct.setPublishDate(publishDate);
+            updatedProduct.setCategory(category);
+            updatedProduct.setDescription(description);
+            updatedProduct.setImage("/images/" +fileName.toString());
             this.productRepository.save(updatedProduct);
 
             Map<String, String> response = new HashMap<>();
@@ -138,7 +121,7 @@ public class ProductController {
     @DeleteMapping("/product/{id}")
     public ResponseEntity deleteProductById(@PathVariable String id, HttpSession session) {
         checkUserAuth(session);
-        Optional<Product> product =Optional.ofNullable(this.productRepository.findByProductId(id));
+        Optional<Product> product = Optional.ofNullable(this.productRepository.findByProductId(id));
 
         if (product.isPresent()) {
             this.productRepository.deleteById(id);
@@ -153,4 +136,13 @@ public class ProductController {
             ResponseEntity.status(401).body("Unauthorized");
         }
     }
+
+//    public String uploadImage(MultipartFile file) throws IOException {
+//        StringBuilder fileNames = new StringBuilder();
+//        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+//        fileNames.append(file.getOriginalFilename());
+//        Files.write(fileNameAndPath, file.getBytes());
+//        model.addAttribute("msg", "Uploaded images: " + fileNames.toString());
+//        return "imageupload/index";
+//    }
 }

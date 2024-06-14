@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="container w-50 m-auto">
-    <form method="POST" id="create-form" class="form my-5">
+    <form method="POST" id="create-form" class="form my-5" enctype="multipart/form-data">
         <h3 class="mb-3">Create Product</h3>
         <label class="form-label" for="titleField">title</label>
         <input class="form-control" type="text" name="title" id="titleField" required><br><br>
@@ -47,6 +47,9 @@
 
         <label class="form-label" for="descriptionField">description</label>
         <input class="form-control" type="text" name="description" id="descriptionField" required><br><br>
+
+        <label class="form-label" for="imageField">description</label>
+        <input class="form-control" type="file" name="image" id="imageField" required><br><br>
 
         <button type="submit" class="btn btn-success">Submit</button>
     </form>

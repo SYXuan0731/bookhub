@@ -165,6 +165,8 @@ async function populateFormData(data) {
     formData.append("publishDate", data.publishDate);
     formData.append("category", data.category);
     formData.append("description", data.description);
+    // formData.append("image", `/images/${data.image}`);
+
     console.log({formData});
     await formDeserialize(form, formData);
 }
@@ -196,15 +198,21 @@ async function loadProductDetails() {
 async function submitFormEdit(e) {
     e.preventDefault();
 
+
     const form = e.target;
-    const formData = new FormData(form);
+    const formData = new FormData();
+    const file = form.image.files[0];
+    formData.append('image', file);
+    formData.append("title", form.title.value);
+    formData.append("author", form.author.value);
+    formData.append("publishDate", form.publishDate.value);
+    formData.append("category", form.category.value);
+    formData.append("description", form.description.value);
+
     try {
         const response = await fetch(`/product/${productId}`, {
             method: 'PATCH',
-            body: JSON.stringify(Object.fromEntries(formData)),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: formData,
         });
 
         if (response.ok) {
@@ -226,14 +234,19 @@ async function submitFormCreate(e) {
     e.preventDefault();
 
     const form = e.target;
-    const formData = new FormData(form);
+    const formData = new FormData();
+    const file = form.image.files[0];
+    formData.append('image', file);
+    formData.append("title", form.title.value);
+    formData.append("author", form.author.value);
+    formData.append("publishDate", form.publishDate.value);
+    formData.append("category", form.category.value);
+    formData.append("description", form.description.value);
+
     try {
         const response = await fetch("/product", {
             method: 'POST',
-            body: JSON.stringify(Object.fromEntries(formData)),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            body: formData,
         });
 
         if (response.ok) {

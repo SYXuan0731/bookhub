@@ -1,6 +1,7 @@
 table img {
     height: 86px;
     width: 50px;
+    object-fit: cover;
 }
 
 table td {
